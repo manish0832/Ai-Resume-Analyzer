@@ -351,6 +351,5 @@ def admin_history_update(record_id):
     return render_template("admin_update.html", data=data)
 
 
-if __name__ == '__main__':
-    # Use host='0.0.0.0' when you want remote access; default debug True for dev only.
-    app.run(debug=True)
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=10000)
