@@ -4,3 +4,4 @@ mysql-connector-python
 pdfminer.six
 python-docx
 werkzeug
+scikit-learn
