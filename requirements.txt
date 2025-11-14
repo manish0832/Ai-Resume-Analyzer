@@ -362,3 +362,5 @@ wsproto==1.2.0
 WTForms==3.2.1
 zipp==3.23.0
 zopfli==0.2.3.post1
+scikit-learn-intelex
+numpy
