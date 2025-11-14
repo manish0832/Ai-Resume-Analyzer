@@ -1,7 +1,6 @@
-wheel==0.45.1
 flask
+gunicorn
 mysql-connector-python
 pdfminer.six
 python-docx
 werkzeug
-gunicorn
