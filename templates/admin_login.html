@@ -1,0 +1,232 @@
+]{% extends "base.html" %}
+{% block title %}Admin Login{% endblock %}
+
+{% block content %}
+
+<!-- BACKGROUND -->
+<div id="particles-js"></div>
+
+<div class="login-wrapper">
+
+    <div class="login-card glass-card animate-up glow-box neon-border" id="loginCard">
+
+        <!-- HEADER -->
+        <h2 class="text-center mb-4 text-gradient fw-bold neon-text shimmer-text">
+            <i class="fas fa-user-shield me-2"></i>Administrator Login
+        </h2>
+
+        <!-- LOGIN FORM -->
+        <form action="/admin/login" method="POST" id="loginForm">
+
+            <div class="mb-3 field-wrapper">
+                <label class="form-label fw-semibold neon-label">Username</label>
+                <input type="text" name="username" 
+                       class="form-control form-control-lg rounded-pill neon-input"
+                       placeholder="Enter admin username" required>
+            </div>
+
+            <div class="mb-4 field-wrapper">
+                <label class="form-label fw-semibold neon-label">Password</label>
+                <input type="password" name="password"
+                       class="form-control form-control-lg rounded-pill neon-input"
+                       placeholder="Enter password" required>
+            </div>
+
+            <button type="submit" class="btn w-100 rounded-pill py-2 neon-button ripple hover-spark">
+                <i class="fas fa-lock-open me-2"></i>Login
+            </button>
+
+        </form>
+
+        {% if error %}
+        <div class="alert alert-danger mt-3 text-center animate-fade">
+            <i class="fas fa-exclamation-circle me-2"></i>{{ error }}
+        </div>
+        {% endif %}
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block extra_css %}
+<style>
+/* ------------------------
+   BACKGROUND + PARTICLES
+------------------------- */
+#particles-js {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(-45deg, #0f0c29, #302b63, #24243e, #1b2735);
+    background-size: 400% 400%;
+    animation: bgShift 12s ease infinite;
+    z-index: -1;
+}
+@keyframes bgShift {
+    0% {background-position: 0% 50%;}
+    50% {background-position: 100% 50%;}
+    100% {background-position: 0% 50%;}
+}
+
+/* ------------------------
+   LAYOUT WRAPPER
+------------------------- */
+.login-wrapper {
+    height: 90vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    perspective: 1200px;
+}
+
+/* ------------------------
+   GLASS + NEON CARD
+------------------------- */
+.glass-card {
+    width: 100%;
+    max-width: 440px;
+    padding: 45px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(25px);
+    border: 1px solid rgba(255,255,255,0.2);
+    box-shadow: 0 0 40px rgba(37,117,252,0.2);
+    transition: transform 0.6s ease, box-shadow 0.6s ease;
+    animation: pulseGlow 3s infinite ease-in-out;
+}
+.glass-card:hover {
+    transform: rotateY(6deg) rotateX(3deg) scale(1.03);
+    box-shadow: 0 0 45px #6a11cb, 0 0 80px #2575fc;
+}
+@keyframes pulseGlow {
+    0%, 100% { box-shadow: 0 0 15px #6a11cb, 0 0 25px #2575fc inset; }
+    50% { box-shadow: 0 0 25px #6a11cb, 0 0 40px #2575fc inset; }
+}
+
+/* ------------------------
+   TEXT EFFECTS
+------------------------- */
+.neon-text {
+    text-shadow: 0 0 8px #6a11cb, 0 0 16px #2575fc;
+}
+.text-gradient {
+    background: linear-gradient(90deg, #6a11cb, #2575fc, #00e0ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.shimmer-text {
+    background: linear-gradient(90deg, #fff, #6a11cb, #2575fc, #fff);
+    background-size: 300%;
+    -webkit-background-clip: text;
+    color: transparent;
+    animation: shimmer 4s linear infinite;
+}
+@keyframes shimmer {
+    0% {background-position: 0%;}
+    100% {background-position: 300%;}
+}
+
+/* ------------------------
+   INPUT + LABEL
+------------------------- */
+.neon-label {
+    color: #d0d8ff;
+    text-shadow: 0 0 6px #6a11cb;
+}
+.neon-input {
+    background: rgba(0,0,0,0.4);
+    border: 2px solid rgba(255,255,255,0.2);
+    color: #fff;
+    transition: 0.3s;
+}
+.neon-input:focus {
+    border-color: #6a11cb;
+    box-shadow: 0 0 20px #6a11cb, 0 0 35px #2575fc;
+    transform: scale(1.02);
+}
+
+/* ------------------------
+   BUTTON EFFECTS
+------------------------- */
+.neon-button {
+    background: linear-gradient(135deg, #6a11cb, #2575fc);
+    color: white;
+    font-weight: bold;
+    border: none;
+    transition: .3s;
+    box-shadow: 0 0 25px rgba(106,17,203,0.4);
+}
+.neon-button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 30px #6a11cb, 0 0 50px #2575fc;
+}
+.hover-spark:hover {
+    position: relative;
+}
+.hover-spark:hover::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 140%;
+    height: 140%;
+    background: radial-gradient(circle, rgba(255,255,255,0.3), transparent 70%);
+    transform: translate(-50%, -50%) scale(0);
+    animation: spark 0.6s ease forwards;
+}
+@keyframes spark {
+    0% { transform: translate(-50%, -50%) scale(0); opacity: 1; }
+    100% { transform: translate(-50%, -50%) scale(1.2); opacity: 0; }
+}
+
+/* ------------------------
+   ANIMATIONS
+------------------------- */
+.animate-up {
+    animation: fadeUp 0.9s ease-out;
+}
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(25px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Fade for alerts */
+.animate-fade {
+    animation: fadeIn 1s ease-in-out;
+}
+@keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity: 1;}
+}
+
+/* ------------------------
+   TEXT COLOR FIX
+------------------------- */
+input, .form-label {
+    color: white !important;
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+<script>
+particlesJS("particles-js", {
+    "particles": {
+        "number": {"value": 80},
+        "color": {"value": "#6a11cb"},
+        "shape": {"type": "circle"},
+        "opacity": {"value": 0.6},
+        "size": {"value": 3},
+        "move": {"speed": 2}
+    },
+    "interactivity": {
+        "events": {
+            "onhover": {"enable": true, "mode": "repulse"}
+        }
+    }
+});
+</script>
+{% endblock %}

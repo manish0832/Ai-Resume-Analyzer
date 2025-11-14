@@ -1,0 +1,451 @@
+<<<<<<< HEAD
+{% extends "base.html" %}
+{% block title %}Resume Analysis Results{% endblock %}
+{% block content %}
+
+<div class="container py-4">
+
+    <!-- SCORE CARDS -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-6">
+            <div class="score-card gradient-card text-center shadow-sm">
+                <h2 class="score-number">{{ results.ats_score }}</h2>
+                <p class="score-label">ATS Compatibility Score</p>
+                <p class="score-sub">Out of 100</p>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="score-card gradient-card text-center shadow-sm">
+                <h2 class="score-number">{{ results.skill_match_percentage }}%</h2>
+                <p class="score-label">Skill Match</p>
+                <p class="score-sub">Skills alignment with job requirements</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- MATCHED SKILLS -->
+    <div class="section-header bg-success text-white p-2 rounded">
+        ✅ Matched Skills
+    </div>
+
+    <div class="white-card shadow-sm p-3 mb-4">
+        {% if results.matched_skills %}
+            <ul class="list-group">
+                {% for skill in results.matched_skills %}
+                <li class="list-group-item d-flex justify-content-between">
+                    <span class="fw-bold">{{ skill }}</span>
+                    <span class="text-success">✔ Matched</span>
+                </li>
+                {% endfor %}
+            </ul>
+
+            <p class="mt-3 text-success fw-semibold">
+                Great! You have {{ results.matched_skills|length }} skills that match the job requirements.
+            </p>
+        {% else %}
+            <p class="text-muted">No matched skills found.</p>
+        {% endif %}
+    </div>
+
+    <!-- MISSING SKILLS -->
+    <div class="section-header bg-warning text-dark p-2 rounded">
+        ⚠ Missing Skills
+    </div>
+
+    <div class="white-card shadow-sm p-3 mb-4">
+        {% if results.missing_skills %}
+            <ul class="list-group">
+                {% for skill in results.missing_skills %}
+                <li class="list-group-item d-flex justify-content-between">
+                    <span class="fw-bold text-danger">{{ skill }}</span>
+                    <span class="text-danger">❗ Missing</span>
+                </li>
+                {% endfor %}
+            </ul>
+
+            <p class="mt-3 text-warning fw-semibold">
+                {{ results.missing_skills|length }} important skills missing.
+            </p>
+        {% else %}
+            <p class="text-success fw-semibold">
+                ✅ Excellent! Your resume covers all the key skills mentioned in the job description.
+            </p>
+        {% endif %}
+    </div>
+
+    <!-- IMPROVEMENT SUGGESTIONS -->
+    <div class="section-header bg-primary text-white p-2 rounded">
+        💡 Improvement Suggestions
+    </div>
+
+    <div class="white-card shadow-sm p-3 mb-4">
+        {% if results.suggestions %}
+            {% for suggestion in results.suggestions %}
+            <div class="alert alert-light border-start border-4 mb-3 
+                {% if suggestion.priority == 'high' %}border-danger
+                {% elif suggestion.priority == 'medium' %}border-warning
+                {% else %}border-success{% endif %}">
+                <div class="d-flex justify-content-between">
+                    <strong>{{ suggestion.title }}</strong>
+                    <span class="badge 
+                        {% if suggestion.priority == 'high' %}bg-danger
+                        {% elif suggestion.priority == 'medium' %}bg-warning text-dark
+                        {% else %}bg-success{% endif %}">
+                        {{ suggestion.priority.upper() }}
+                    </span>
+                </div>
+                <div class="text-muted mt-1">{{ suggestion.description }}</div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="alert alert-success">
+                ✅ Your resume looks excellent — no major improvements needed!
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- ACTION BUTTONS -->
+    <div class="text-center my-4">
+
+        {% if results.optimized_resume %}
+        <a href="/download/{{ results.optimized_resume }}"
+           class="btn btn-primary btn-lg px-4 me-3">
+            ⬇ Download Optimized Resume
+        </a>
+        {% endif %}
+
+        <a href="/" class="btn btn-outline-secondary btn-lg px-4">
+            🔄 Analyze Another Resume
+        </a>
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .gradient-card {
+        background: linear-gradient(135deg, #6a11cb, #2575fc);
+        border-radius: 15px;
+        padding: 25px;
+        color: white;
+    }
+    .score-number {
+        font-size: 3.5rem;
+        font-weight: 800;
+    }
+    .score-label {
+        font-size: 1.1rem;
+        font-weight: bold;
+        margin-top: 8px;
+    }
+    .score-sub {
+        font-size: 0.9rem;
+        opacity: 0.9;
+    }
+    .section-header {
+        font-size: 1.1rem;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+    }
+    .white-card {
+        border-radius: 10px;
+        background: white;
+    }
+</style>
+{% endblock %}
+=======
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Analysis Results - AI Resume Analyzer</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .score-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .score-number {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .progress-custom {
+            height: 20px;
+            border-radius: 10px;
+        }
+        .skill-badge {
+            background-color: #e3f2fd;
+            color: #1976d2;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin: 3px;
+            display: inline-block;
+        }
+        .missing-skill-badge {
+            background-color: #ffebee;
+            color: #d32f2f;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin: 3px;
+            display: inline-block;
+        }
+        .suggestion-card {
+            border-left: 4px solid #667eea;
+            margin-bottom: 15px;
+        }
+        .priority-high {
+            border-left-color: #f44336;
+        }
+        .priority-medium {
+            border-left-color: #ff9800;
+        }
+        .priority-low {
+            border-left-color: #4caf50;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+        }
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-chart-line me-2"></i>AI Resume Analyzer
+            </a>
+            <a href="/" class="btn btn-outline-light">
+                <i class="fas fa-arrow-left me-2"></i>Analyze Another Resume
+            </a>
+        </div>
+    </nav>
+
+    <div class="container my-5">
+        <!-- Header -->
+        <div class="row mb-4">
+            <div class="col-12 text-center">
+                <h1 class="display-5 fw-bold text-primary">
+                    <i class="fas fa-chart-bar me-3"></i>Resume Analysis Results
+                </h1>
+                <p class="lead text-muted">Here's how your resume performs against the job requirements</p>
+            </div>
+        </div>
+
+        <!-- Score Cards -->
+        <div class="row mb-5">
+            <div class="col-md-6">
+                <div class="score-card">
+                    <div class="score-number">{{ results.ats_score }}</div>
+                    <h4>ATS Compatibility Score</h4>
+                    <p class="mb-0">Out of 100</p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="score-card">
+                    <div class="score-number">{{ results.skill_match_percentage }}%</div>
+                    <h4>Skill Match</h4>
+                    <p class="mb-0">Skills alignment with job requirements</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detailed Analysis -->
+        <div class="row">
+            <!-- Skills Analysis -->
+            <div class="col-lg-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0"><i class="fas fa-check-circle me-2"></i>Matched Skills</h5>
+                    </div>
+                    <div class="card-body">
+                        {% if results.matched_skills %}
+                            <div class="mb-3">
+                                {% for skill in results.matched_skills %}
+                                    <span class="skill-badge">{{ skill }}</span>
+                                {% endfor %}
+                            </div>
+                            <p class="text-success">
+                                <i class="fas fa-thumbs-up me-2"></i>
+                                Great! You have {{ results.matched_skills|length }} skills that match the job requirements.
+                            </p>
+                        {% else %}
+                            <p class="text-muted">No specific technical skills were matched. Consider adding more relevant skills to your resume.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-header bg-warning text-white">
+                        <h5 class="mb-0"><i class="fas fa-exclamation-triangle me-2"></i>Missing Skills</h5>
+                    </div>
+                    <div class="card-body">
+                        {% if results.missing_skills %}
+                            <div class="mb-3">
+                                {% for skill in results.missing_skills %}
+                                    <span class="missing-skill-badge">{{ skill }}</span>
+                                {% endfor %}
+                            </div>
+                            <p class="text-warning">
+                                <i class="fas fa-lightbulb me-2"></i>
+                                Consider adding these {{ results.missing_skills|length }} skills if you have experience with them.
+                            </p>
+                        {% else %}
+                            <p class="text-success">
+                                <i class="fas fa-check me-2"></i>
+                                Excellent! Your resume covers all the key skills mentioned in the job description.
+                            </p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Improvement Suggestions -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0"><i class="fas fa-lightbulb me-2"></i>Improvement Suggestions</h5>
+                    </div>
+                    <div class="card-body">
+                        {% if results.suggestions %}
+                            {% for suggestion in results.suggestions %}
+                                <div class="card suggestion-card priority-{{ suggestion.priority }}">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-start">
+                                            <div>
+                                                <h6 class="card-title">
+                                                    {% if suggestion.priority == 'high' %}
+                                                        <i class="fas fa-exclamation-circle text-danger me-2"></i>
+                                                    {% elif suggestion.priority == 'medium' %}
+                                                        <i class="fas fa-exclamation-triangle text-warning me-2"></i>
+                                                    {% else %}
+                                                        <i class="fas fa-info-circle text-success me-2"></i>
+                                                    {% endif %}
+                                                    {{ suggestion.title }}
+                                                </h6>
+                                                <p class="card-text">{{ suggestion.description }}</p>
+                                            </div>
+                                            <span class="badge bg-{{ 'danger' if suggestion.priority == 'high' else 'warning' if suggestion.priority == 'medium' else 'success' }}">
+                                                {{ suggestion.priority.upper() }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="alert alert-success">
+                                <i class="fas fa-trophy me-2"></i>
+                                Congratulations! Your resume looks great and doesn't need major improvements.
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="row mb-4">
+            <div class="col-12 text-center">
+                <button class="btn btn-primary btn-lg me-3" onclick="downloadOptimizedResume()">
+                    <i class="fas fa-download me-2"></i>Download Optimized Resume
+                </button>
+                <a href="/" class="btn btn-outline-primary btn-lg">
+                    <i class="fas fa-redo me-2"></i>Analyze Another Resume
+                </a>
+            </div>
+        </div>
+
+        <!-- Score Interpretation -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0"><i class="fas fa-info-circle me-2"></i>Score Interpretation</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6>ATS Compatibility Score:</h6>
+                                <ul class="list-unstyled">
+                                    <li><span class="badge bg-success me-2">90-100</span>Excellent - Very likely to pass ATS</li>
+                                    <li><span class="badge bg-primary me-2">80-89</span>Good - Should pass most ATS systems</li>
+                                    <li><span class="badge bg-warning me-2">70-79</span>Fair - May need improvements</li>
+                                    <li><span class="badge bg-danger me-2">Below 70</span>Poor - Needs significant improvements</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <h6>Skill Match Percentage:</h6>
+                                <ul class="list-unstyled">
+                                    <li><span class="badge bg-success me-2">80%+</span>Excellent match for the role</li>
+                                    <li><span class="badge bg-primary me-2">60-79%</span>Good match with room for improvement</li>
+                                    <li><span class="badge bg-warning me-2">40-59%</span>Moderate match - add more relevant skills</li>
+                                    <li><span class="badge bg-danger me-2">Below 40%</span>Low match - consider skill development</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function downloadOptimizedResume() {
+            const resumeText = `{{ results.resume_text|safe }}`;
+            const suggestions = {{ results.suggestions|tojson }};
+            
+            fetch('/download-optimized', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    resume_text: resumeText,
+                    suggestions: suggestions
+                })
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.blob();
+                } else {
+                    throw new Error('Failed to generate optimized resume');
+                }
+            })
+            .then(blob => {
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = url;
+                a.download = 'optimized_resume.docx';
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+            })
+            .catch(error => {
+                alert('Error downloading optimized resume: ' + error.message);
+            });
+        }
+    </script>
+</body>
+</html>
+>>>>>>> 35d06f106838182f638c5837ab66ff70093d15b9

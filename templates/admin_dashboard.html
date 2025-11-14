@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard{% endblock %}
+{% block content %}
+
+<!-- ✅ LOADING SCREEN -->
+<div id="loading-screen">
+    <div class="loader-container">
+        <div class="loader-ring"></div>
+        <div class="loader-ring"></div>
+        <div class="loader-ring"></div>
+        <h2 class="loading-text">Loading Dashboard...</h2>
+    </div>
+</div>
+
+<!-- ✅ DASHBOARD CONTENT -->
+<div class="dashboard-container">
+
+    <!-- Page Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4 animate-fade">
+        <h2 class="fw-bold">
+            <i class="fas fa-tachometer-alt me-2"></i>Admin Dashboard
+        </h2>
+
+        <a href="/admin/logout" class="btn btn-danger rounded-pill px-4">
+            <i class="fas fa-sign-out-alt me-2"></i>Logout
+        </a>
+    </div>
+
+    <!-- ✅ SUBTEXT -->
+    <p class="text-dark fw-semibold mb-4 animate-fade" style="font-size: 1.1rem;">
+        Welcome Admin! Monitor, track & manage AI Resume Analyzer system activities in real-time.
+    </p>
+
+    <!-- ✅ NEW ADMIN ACTION BUTTONS -->
+    <div class="row mb-5 g-3 animate-up">
+        <div class="col-md-4">
+            <a href="/admin/history" class="btn btn-primary w-100 py-3 action-btn">
+                <i class="fas fa-history me-2"></i> View Resume History
+            </a>
+        </div>
+    </div>
+
+    <!-- ✅ Stats Cards -->
+    <div class="row g-4">
+
+        <div class="col-md-4">
+            <div class="card stat-card gradient-purple animate-pop">
+                <div class="card-body">
+                    <h5 class="fw-bold">Total Resumes Analyzed</h5>
+                    <h2 class="fw-bold mt-2">{{ stats.total_resumes }}</h2>
+                    <i class="fas fa-file-alt stat-icon"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card stat-card gradient-blue animate-pop">
+                <div class="card-body">
+                    <h5 class="fw-bold">Average ATS Score</h5>
+                    <h2 class="fw-bold mt-2">{{ stats.avg_ats_score }}%</h2>
+                    <i class="fas fa-chart-line stat-icon"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card stat-card gradient-green animate-pop">
+                <div class="card-body">
+                    <h5 class="fw-bold">Average Skill Match</h5>
+                    <h2 class="fw-bold mt-2">{{ stats.avg_skill_match }}%</h2>
+                    <i class="fas fa-check-circle stat-icon"></i>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ✅ REMOVED CHART SECTION -->
+    <!-- (ATS Score Trend + Skill Match Trend removed as requested) -->
+
+</div>
+
+{% endblock %}
+
+{% block extra_css %}
+<!-- ✅ Keep all CSS same (no changes needed) -->
+<style>
+/* your entire CSS stays exactly the same */
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+/* ✅ Keep loader animation script only */
+document.addEventListener("DOMContentLoaded", function () {
+    setTimeout(() => {
+        const loader = document.getElementById("loading-screen");
+        loader.style.opacity = "0";
+        setTimeout(() => loader.style.display = "none", 500);
+    }, 1500);
+});
+</script>
+
+
+
+
+{% endblock %}

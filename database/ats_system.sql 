@@ -1,0 +1,82 @@
+-- ats_system.sql
+-- MySQL schema for AI Resume Analyzer
+-- Run: mysql -u root -p < ats_system.sql
+-- (Recommend storing passwords as hashes in production)
+
+CREATE DATABASE IF NOT EXISTS ats_system
+  CHARACTER SET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci;
+USE ats_system;
+
+-- ------------------------
+-- Admin users (store hashed passwords in production)
+-- ------------------------
+CREATE TABLE IF NOT EXISTS admin (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  username VARCHAR(100) NOT NULL UNIQUE,
+  -- In production store strong hashes (bcrypt). This column holds the password or password hash.
+  password VARCHAR(255) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Example admin user (change password immediately in production).
+-- If you want to store plain text (not recommended) use the line below.
+INSERT INTO admin (username, password) VALUES ('admin', 'admin123');
+
+-- If you'd rather insert a SHA-256 hash (still not ideal vs bcrypt), use:
+-- INSERT INTO admin (username, password) VALUES ('admin', SHA2('admin123', 256));
+
+
+-- ------------------------
+-- Resume analysis table
+-- ------------------------
+CREATE TABLE IF NOT EXISTS resume_analysis (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  filename VARCHAR(255),
+  job_description TEXT,
+  resume_text LONGTEXT,
+  ats_score INT,
+  matched_skills JSON,
+  missing_skills JSON,
+  skill_match_percentage FLOAT,
+  suggestions JSON,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  INDEX idx_created_at (created_at),
+  INDEX idx_ats_score (ats_score)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- ------------------------
+-- Download logs
+-- ------------------------
+CREATE TABLE IF NOT EXISTS download_logs (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  resume_id INT NULL,
+  download_time DATETIME DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (resume_id) REFERENCES resume_analysis(id)
+    ON DELETE SET NULL
+    ON UPDATE CASCADE,
+  INDEX idx_resume_id (resume_id),
+  INDEX idx_download_time (download_time)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+-- ------------------------
+-- Optional convenience view: daily stats
+-- ------------------------
+DROP VIEW IF EXISTS vw_daily_stats;
+CREATE VIEW vw_daily_stats AS
+SELECT
+  DATE(created_at) AS day,
+  COUNT(*) AS resumes_count,
+  ROUND(AVG(ats_score),2) AS avg_ats_score,
+  ROUND(AVG(skill_match_percentage),2) AS avg_skill_match
+FROM resume_analysis
+GROUP BY DATE(created_at)
+ORDER BY day DESC;
+
+-- ------------------------
+-- Small seed data (optional)
+-- ------------------------
+-- INSERT INTO resume_analysis (filename, job_description, resume_text, ats_score, matched_skills, missing_skills, skill_match_percentage, suggestions)
+-- VALUES ('example.pdf','Sample JD text','Sample resume text', 75, JSON_ARRAY('python','sql'), JSON_ARRAY('docker'), 66.7, JSON_ARRAY(JSON_OBJECT('type','skills','title','Add Missing Technical Skills','description','Add Docker','priority','high')));
+

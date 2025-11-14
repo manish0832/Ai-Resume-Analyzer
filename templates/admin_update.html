@@ -1,0 +1,147 @@
+{% extends "base.html" %}
+{% block title %}Update Resume Record{% endblock %}
+{% block content %}
+
+<!-- PAGE WRAPPER -->
+<div class="page-animate">
+
+    <!-- HEADER -->
+    <div class="text-center mb-5 animate-fade">
+        <h1 class="display-5 fw-bold text-gradient neon-text">
+            <i class="fas fa-edit me-2"></i> Update Resume Record
+        </h1>
+        <p class="text-muted">Modify and save the updated applicant information</p>
+    </div>
+
+    <!-- UPDATE CARD -->
+    <div class="container d-flex justify-content-center">
+        <div class="update-card glass-card p-4 shadow-lg animate-up">
+
+            <!-- FORM -->
+            <form method="POST">
+
+                <!-- Name -->
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Full Name</label>
+                    <input type="text" class="form-control cool-input" name="name" value="{{ history.name }}" required>
+                </div>
+
+                <!-- Email -->
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Email</label>
+                    <input type="email" class="form-control cool-input" name="email" value="{{ history.email }}" required>
+                </div>
+
+                <!-- Skills -->
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Skills</label>
+                    <textarea class="form-control cool-input" name="skills" rows="3" required>{{ history.skills }}</textarea>
+                </div>
+
+                <!-- ATS Score -->
+                <div class="mb-3">
+                    <label class="form-label fw-bold">ATS Score</label>
+                    <input type="number" class="form-control cool-input" name="ats_score" value="{{ history.ats_score }}" required>
+                </div>
+
+                <!-- Skill Match -->
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Skill Match %</label>
+                    <input type="number" class="form-control cool-input" name="skill_match" value="{{ history.skill_match }}" required>
+                </div>
+
+                <!-- Buttons -->
+                <div class="d-flex justify-content-between mt-4">
+
+                    <!-- Back -->
+                    <a href="/admin/history" class="btn btn-secondary rounded-pill px-4 py-2 back-btn">
+                        <i class="fas fa-arrow-left me-2"></i>Back
+                    </a>
+
+                    <!-- Save -->
+                    <button type="submit" class="btn btn-gradient rounded-pill px-4 py-2 save-btn">
+                        <i class="fas fa-save me-2"></i>Save Changes
+                    </button>
+
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+</div>
+
+<style>
+/* Animations */
+.page-animate {
+    animation: fadeIn 1.1s ease;
+}
+.animate-fade {
+    animation: fadeUp 0.9s ease;
+}
+.animate-up {
+    animation: slideUp 0.7s ease;
+}
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+@keyframes slideUp {
+    from { transform: translateY(30px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+/* Card styling */
+.update-card {
+    width: 600px;
+    border-radius: 20px;
+    backdrop-filter: blur(12px);
+    background: rgba(255, 255, 255, 0.2);
+    border: 2px solid rgba(255, 255, 255, 0.25);
+    transition: 0.3s;
+}
+.update-card:hover {
+    transform: scale(1.02) rotateX(2deg);
+}
+
+/* Inputs */
+.cool-input {
+    border-radius: 12px;
+    border: 2px solid transparent;
+    background: rgba(255, 255, 255, 0.7);
+    transition: 0.3s;
+}
+.cool-input:focus {
+    border-color: #ff7bff;
+    box-shadow: 0 0 15px rgba(255, 0, 255, 0.4);
+}
+
+/* Buttons */
+.btn-gradient {
+    background: linear-gradient(90deg, #ff00cc, #3333ff);
+    color: white;
+    font-weight: bold;
+    transition: 0.3s;
+    border-radius: 50px;
+}
+.btn-gradient:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(255, 0, 255, 0.4);
+}
+
+.back-btn:hover {
+    transform: translateY(-3px);
+}
+
+/* Neon text */
+.neon-text {
+    text-shadow: 0 0 10px #ff00ff, 0 0 20px #9900ff;
+}
+
+</style>
+
+{% endblock %}

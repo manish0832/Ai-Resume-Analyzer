@@ -1,0 +1,223 @@
+{% extends "base.html" %}
+{% block title %}Resume History{% endblock %}
+{% block content %}
+
+<!-- PAGE HEADER -->
+<div class="mb-4 text-center animate-fade">
+    <h1 class="fw-bold glowing-text-3d">
+        <i class="fas fa-history me-2"></i> Resume Analysis History
+    </h1>
+    <p class="text-dark">Track all analyzed resumes and download results.</p>
+</div>
+
+<!-- ✅ SEARCH + FILTERS -->
+<div class="card shadow-lg p-4 mb-4 animate-up glass-card-3d">
+    <div class="row g-3">
+
+        <div class="col-md-6">
+            <input type="text" id="searchInput" class="form-control fancy-input"
+                placeholder="Search by filename, skills or job description...">
+        </div>
+
+        <div class="col-md-3">
+            <select class="form-select fancy-input" id="scoreFilter">
+                <option value="">Filter by ATS Score</option>
+                <option value="80">80%+</option>
+                <option value="60">60%+</option>
+                <option value="40">40%+</option>
+            </select>
+        </div>
+
+        <div class="col-md-3">
+            <select class="form-select fancy-input" id="matchFilter">
+                <option value="">Filter by Skill Match</option>
+                <option value="80">80%+</option>
+                <option value="60">60%+</option>
+                <option value="40">40%+</option>
+            </select>
+        </div>
+
+    </div>
+</div>
+
+<!-- ✅ HISTORY TABLE -->
+<div class="card shadow-lg p-3 animate-up glass-card-3d">
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover neon-table" id="historyTable">
+            <thead class="table-dark neon-header">
+                <tr>
+                    <th>ID</th>
+                    <th>Filename</th>
+                    <th>ATS Score</th>
+                    <th>Skill Match %</th>
+                    <th>Created</th>
+                    <th width="150">Download</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for r in history %}
+                <tr class="table-row-3d">
+                    <td>{{ r.id }}</td>
+                    <td>{{ r.filename }}</td>
+                    <td>{{ r.ats_score }}%</td>
+                    <td>{{ r.skill_match_percentage }}%</td>
+                    <td>{{ r.created_at }}</td>
+
+                    <td>
+                        <a href="/admin/history/download/{{ r.id }}" class="btn btn-success btn-sm glow-btn-green">
+                            <i class="fas fa-download"></i> Download
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+
+        </table>
+    </div>
+</div>
+
+<!-- ✅ BACK BUTTON -->
+<div class="text-center mt-4 animate-up">
+    <a href="/admin/dashboard" class="btn btn-secondary px-4 py-2 glow-btn">
+        <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+    </a>
+</div>
+
+{% endblock %}
+
+{% block extra_css %}
+<style>
+
+    /* ✅ 3D Glowing Header Text */
+    .glowing-text-3d {
+        font-size: 2.6rem;
+        color: #1a73e8;
+        text-shadow: 
+            0 0 10px rgba(26, 115, 232, 0.7),
+            0 0 20px rgba(26, 115, 232, 0.7),
+            0 0 40px rgba(26, 115, 232, 0.5);
+        transition: 0.3s;
+    }
+
+    .glowing-text-3d:hover {
+        transform: scale(1.05);
+        text-shadow:
+            0 0 15px #1a73e8,
+            0 0 30px #1a73e8,
+            0 0 60px #1a73e8;
+    }
+
+    /* ✅ 3D Glass Cards */
+    .glass-card-3d {
+        border-radius: 15px;
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        backdrop-filter: blur(10px);
+        background: rgba(255, 255, 255, 0.5);
+        box-shadow: 
+            0 4px 12px rgba(0, 0, 0, 0.1),
+            0 0 20px rgba(26, 115, 232, 0.2);
+        transition: 0.3s ease-in-out;
+    }
+
+    .glass-card-3d:hover {
+        transform: translateY(-5px);
+        box-shadow:
+            0 8px 20px rgba(0, 0, 0, 0.15),
+            0 0 40px rgba(26, 115, 232, 0.4);
+    }
+
+    /* ✅ Fancy Inputs */
+    .fancy-input {
+        border-radius: 12px;
+        padding: 12px;
+        border: 1px solid #ccc;
+        transition: 0.3s;
+    }
+
+    .fancy-input:focus {
+        border-color: #1a73e8;
+        box-shadow: 0 0 8px #1a73e8;
+    }
+
+    /* ✅ Neon Table Effects */
+    .neon-header {
+        text-shadow: 
+            0px 0px 5px #00eaff,
+            0px 0px 10px #00eaff;
+    }
+
+    .table-row-3d:hover {
+        transform: scale(1.01);
+        background: rgba(0, 140, 255, 0.06) !important;
+        box-shadow: 0 0 10px rgba(0, 140, 255, 0.4);
+        transition: 0.2s;
+    }
+
+    .neon-table {
+        border-radius: 14px;
+        overflow: hidden;
+    }
+
+    /* ✅ Glow Buttons */
+    .glow-btn {
+        box-shadow: 0 0 10px rgba(0, 140, 255, 0.6);
+        transition: 0.2s;
+    }
+    .glow-btn:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 15px rgba(0, 140, 255, 1);
+    }
+
+    .glow-btn-green {
+        box-shadow: 0 0 10px rgba(40, 167, 69, 0.6);
+    }
+    .glow-btn-green:hover {
+        box-shadow: 0 0 15px rgba(40, 167, 69, 1);
+        transform: scale(1.05);
+    }
+
+    /* ✅ Animations */
+    .animate-fade { animation: fadeIn 0.9s ease; }
+    .animate-up { animation: slideUp 1s ease; }
+
+    @keyframes fadeIn { from {opacity: 0;} to {opacity: 1;} }
+    @keyframes slideUp { from {opacity: 0; transform: translateY(20px);} to {opacity: 1; transform: translateY(0);} }
+
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    const searchInput = document.getElementById("searchInput");
+    const scoreFilter = document.getElementById("scoreFilter");
+    const matchFilter = document.getElementById("matchFilter");
+    const table = document.getElementById("historyTable");
+    const rows = table.getElementsByTagName("tr");
+
+    function filterTable() {
+        const search = searchInput.value.toLowerCase();
+        const scoreVal = scoreFilter.value;
+        const matchVal = matchFilter.value;
+
+        for (let i = 1; i < rows.length; i++) {
+            const cols = rows[i].getElementsByTagName("td");
+            const filename = cols[1].innerText.toLowerCase();
+            const ats = parseInt(cols[2].innerText);
+            const match = parseInt(cols[3].innerText);
+
+            let visible = true;
+
+            if (search && !filename.includes(search)) visible = false;
+            if (scoreVal && ats < scoreVal) visible = false;
+            if (matchVal && match < matchVal) visible = false;
+
+            rows[i].style.display = visible ? "" : "none";
+        }
+    }
+
+    searchInput.addEventListener("keyup", filterTable);
+    scoreFilter.addEventListener("change", filterTable);
+    matchFilter.addEventListener("change", filterTable);
+</script>
+{% endblock %}
