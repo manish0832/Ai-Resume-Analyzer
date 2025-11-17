@@ -1,7 +1,7 @@
 flask==3.0.3
 gunicorn==23.0.0
 mysql-connector-python==8.0.33
-pdfminer.six==20240718
+pdfminer.six==20240706
 python-docx==1.1.2
 werkzeug==3.0.3
 
